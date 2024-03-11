@@ -1,0 +1,12 @@
+{
+  "maintenance": false,
+  "autorefresh": false,
+  "gameModes": {
+    "minesweeper": false,
+    "tetris": false,
+    "pacman": false,
+    "2048": false,
+    "psp": false,
+    "pmp": false
+  }
+}
