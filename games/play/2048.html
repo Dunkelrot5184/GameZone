@@ -1,0 +1,85 @@
+<html>
+<!--Play the game in fullscreen for better view. 
+First click anywhere on the square box to start the game. To play the game use up, down, right and left arrows or use mouse to direct the tiles -->
+
+<head>
+    <title>2048 | GameZone</title>
+    <link rel="stylesheet" href="../design/2048/style.css"/>
+    <script type="text/javascript" src="../logic/2048/index.js"></script>
+</head>
+<body>
+
+<p> join the number to get 2048 tile!</p>
+<div class="cover"></div>
+<div class="container">
+    <div class="logo">2048</div>
+    <div class="scoreBar">
+        <label style="position: relative; top:-13px;">score:</label>
+        <label id="score"> 0</label>
+        <div id="addScore"></div>
+    </div>
+    <div id="stage"></div>
+    <!--<div id="gameOver hide">-->
+        <!--<div class="overText">GameOver!</div>-->
+    <!--</div>-->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    checkMaintenanceStatus();
+    setInterval(checkMaintenanceStatus, 5000); // Check every 5 seconds
+});
+
+function checkMaintenanceStatus() {
+    fetch('../../../maintenanceVariables.json')
+        .then(response => response.json())
+        .then(data => {
+            if (data.gameModes.2048) {
+                displayMaintenanceScreen();
+            } else {
+                removeMaintenanceScreen();
+            }
+        })
+        .catch(error => console.error('Failed to load maintenance variables:', error));
+}
+
+function displayMaintenanceScreen() {
+    let maintenanceScreen = document.getElementById('maintenanceScreen');
+    if (!maintenanceScreen) {
+        maintenanceScreen = document.createElement('div');
+        maintenanceScreen.id = 'maintenanceScreen';
+        maintenanceScreen.style.position = 'fixed';
+        maintenanceScreen.style.left = 0;
+        maintenanceScreen.style.top = 0;
+        maintenanceScreen.style.width = '100%';
+        maintenanceScreen.style.height = '100%';
+        maintenanceScreen.style.backgroundColor = 'black'; // Pure black background
+        maintenanceScreen.style.zIndex = 1000;
+        maintenanceScreen.style.display = 'flex';
+        maintenanceScreen.style.justifyContent = 'center';
+        maintenanceScreen.style.alignItems = 'center';
+        maintenanceScreen.style.color = 'white';
+        maintenanceScreen.style.fontSize = '24px';
+        maintenanceScreen.style.flexDirection = 'column';
+        maintenanceScreen.innerHTML = `<p>We're currently performing maintenance. Please check back later.</p>`;
+
+        // Append the maintenance screen to the body
+        document.body.appendChild(maintenanceScreen);
+
+        // Optionally, hide the game container
+        document.getElementById('game-container').style.display = 'none';
+    }
+}
+
+function removeMaintenanceScreen() {
+    const maintenanceScreen = document.getElementById('maintenanceScreen');
+    if (maintenanceScreen) {
+        document.body.removeChild(maintenanceScreen);
+        // Optionally, show the game container again
+        document.getElementById('game-container').style.display = 'flex';
+    }
+}
+</script>
+
+
+</body>
+</html>
