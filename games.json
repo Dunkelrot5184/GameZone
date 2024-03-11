@@ -1,0 +1,31 @@
+{
+  "maintenance": false,
+  "autorefresh": false,
+  "games": [
+    {
+      "name": "Tetris",
+      "image": "games/img/tetris/tetris.png",
+      "url": "./games/play/tetris"
+    },
+    {
+      "name": "Minesweeper",
+      "image": "games/img/ms/minesweeper.png",
+      "url": "./games/play/minesweeper"
+    },
+    {
+      "name": "Pac-Man",
+      "image": "games/img/main/pac-man.png",
+      "url": "./games/play/pac-man"
+    },
+    {
+      "name": "Pong",
+      "image": "games/img/main/pong.png",
+      "url": "./pong-menu"
+    },
+    {
+      "name": "2048",
+      "image": "games/img/main/2048.png",
+      "url": "./games/play/2048"
+    }
+  ]
+}
