@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="./games/img/main/gamezone.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameZone</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #008080; /* Classic teal background */
+            color: #000000; /* Black text */
+            font-family: "MS Sans Serif", Geneva, sans-serif;
+            cursor: url('games/img/main/cursorcustom.cur'), default; /* Windows 98 cursor */
+        }
+
+        .container {
+            border: 2px solid #000000; /* Black border for the window */
+            background-color: #C0C0C0; /* Classic gray window background */
+            padding: 10px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 800px; /* Set a max-width for the container */
+        }
+
+        h1, h2 {
+            color: #000000; /* Black title text */
+            font-size: 24px;
+            margin: 0 0 20px 0; /* Adjusted margin for the title */
+        }
+
+        #gameList {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .game {
+            cursor: pointer;
+            background-color: #C0C0C0; /* Match the container background */
+            border: 1px solid #000; /* Solid black border */
+            padding: 5px;
+        }
+
+        .game:hover {
+            background-color: #A9A9A9; /* Darker gray on hover for contrast */
+        }
+
+        .gameImage {
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            margin-bottom: 5px;
+            border: 1px solid #000; /* Solid black border around game images */
+        }
+
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #C0C0C0; /* Classic taskbar gray */
+            color: black;
+            display: flex;
+            align-items: center;
+            padding: 4px 10px;
+            font-size: 14px;
+        }
+
+        .taskbar .start-button, .footer-button {
+            background-color: #000080; /* Dark blue background */
+            color: white;
+            padding: 2px 8px;
+            font-family: "MS Sans Serif", Geneva, sans-serif;
+            text-align: center;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .footer {
+            display: block; /* Initially shown */
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            bottom: 30px; /* Above the taskbar */
+            width: 100%;
+            font-size: 14px;
+            background-color: #C0C0C0;
+            color: #000000;
+            border-top: 2px solid #000000;
+        }
+
+        .footer a {
+            color: #000000;
+            text-decoration: none;
+            padding: 0 5px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Startup Animation Styles */
+        .startup-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeOutAnimation 5s forwards; /* Adjust time as needed */
+            z-index: 2000; /* Ensure it's above other content */
+        }
+        
+        .maintenanceScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1; /* Start fully visible */
+    transition: opacity 1s ease-out; /* Smooth transition for opacity */
+    visibility: visible; /* Start as visible */
+}
+
+
+        @keyframes fadeOutAnimation {
+            0% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .announcements {
+            text-align: left;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0; /* Lighter gray for contrast */
+            border-radius: 8px; /* Rounded corners */
+        }
+    </style>
+</head>
+<body>
+    <!-- Startup Animation -->
+    <div class="startup-animation" id="startupAnimation">
+        <h1 style="color: white;">Starting GameZone...</h1>
+    </div>
+    
+        <div class="maintenanceScreen" id="maintain">
+        <h1 style="color: white;">We're working behind the scenes to fix a few bugs and update the site, please hold tight...</h1>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Welcome to GameZone</h1>
+        <div id="gameList">
+            <!-- Games will be loaded here by JavaScript -->
+        </div>
+        <!-- Announcements Section -->
+        <div class="announcements">
+            <h2>Announcements</h2>
+            <p>v2.3.3 GameZone</p>
+            <p>New Game: 2048</p>
+            <p>Added Mainenance screens for all pages.</p>
+            <p>New Feature: Added the 'SPACE' bar hotkey for tetris to act as the instant drop.</p>
+            <p>Restablized all game clients.</p>
+            <!-- Additional announcements can be added here -->
+        </div>
+    </div>
+    <div class="footer" id="footer">
+        Credits & Links: <a href="https://github.com/dunkelrot5184">GitHub</a> | <a href="https://open.spotify.com/user/3ua5pg85rwmfg9dtyghqyroqj">Spotify</a> | <a href="https://discordapp.com/users/980280857958965328">Discord</a> | <a href="https://www.snapchat.com/add/dunkelrot5184">Snapchat</a>
+    </div>
+    <div class="taskbar">
+        <img src="games/img/ms/start.png"></img>
+        <div class="footer-button" onclick="toggleFooter()" hidden>Credits & Links</div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchGames();
+            initAnimation();
+            checkMaintenance();
+        });
+
+        function fetchGames() {
+            fetch('games.json') // Adjust the path to your JSON file as needed
+                .then(response => response.json())
+                .then(data => {
+                    const sortedGames = data.games.sort((a, b) => {
+                        if (a.name === "Parked") return 1;
+                        if (b.name === "Parked") return -1;
+                        return a.name.localeCompare(b.name);
+                    });
+                    displayGames(sortedGames);
+                })
+                .catch(error => console.error("Could not load games:", error));
+        }
+
+        function displayGames(games) {
+            const gameList = document.getElementById('gameList');
+            gameList.innerHTML = ''; // Clear existing games
+            games.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.className = 'game';
+                gameElement.onclick = () => location.href = game.url;
+
+                const gameImage = document.createElement('div');
+                gameImage.className = 'gameImage';
+                gameImage.style.backgroundImage = `url('${game.image}')`;
+
+                const gameName = document.createElement('span');
+                gameName.textContent = game.name;
+
+                gameElement.appendChild(gameImage);
+                gameElement.appendChild(gameName);
+                gameList.appendChild(gameElement);
+            });
+        }
+
+        function initAnimation() {
+            setTimeout(function() {
+                document.getElementById('startupAnimation').style.display = 'none';
+            }, 5000); // Ensure this matches the animation duration
+        }
+        
+        function checkMaintenance() {
+    fetch('maintenanceVariables.json')
+        .then(response => response.json())
+        .then(data => {
+            const maintainElement = document.getElementById('maintain');
+            if (data.maintenance) {
+                maintainElement.style.opacity = '1';
+                maintainElement.style.visibility = 'visible';
+            } else {
+                maintainElement.style.opacity = '0';
+                // Wait for the transition to finish before hiding the element
+                setTimeout(() => {
+                    maintainElement.style.visibility = 'hidden';
+                }, 1000); // Match the duration of the CSS opacity transition
+                initAnimation(); // Optionally, re-initialize the start animation here if maintenance mode ends
+            }
+            if (data.autorefresh) {
+                window.location.reload();
+            } else {
+                return;
+            }
+        })
+        .catch(error => console.error("Error checking maintenance status:", error));
+
+    // Optionally, set this to check periodically
+    setTimeout(checkMaintenance, 5000); // Check every 60 seconds
+}
+
+        function toggleFooter() {
+            var footer = document.getElementById("footer");
+            if (footer.style.display === "none") {
+                footer.style.display = "block";
+            } else {
+                footer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
