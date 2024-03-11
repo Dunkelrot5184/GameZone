@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tetris | GameZone</title>
+  <link rel="icon" href="../img/tetris/tetris.png" type="image/png">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas {
+      border: 1px solid white;
+    }
+    #game-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+    #sidebar {
+      display: flex;
+      flex-direction: column;
+      color: white;
+      font-size: 20px;
+      margin-left: 20px;
+    }
+    #hotkey-notes {
+      color: #888;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+    #reset-button {
+      padding: 10px;
+      margin-top: 20px;
+      color: white;
+      background-color: #333;
+      border: 1px solid white;
+      cursor: pointer;
+    }
+    #reset-button:hover {
+      background-color: #555;
+    }
+    #return-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 90.5px; /* Resize width as needed */
+      height: 34.75px; /* Resize height as needed */
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas width="320" height="640" id="game"></canvas>
+        <div id="sidebar">
+            <div id="score">Score: 0</div>
+            <div id="level">Level: 1</div>
+            <div id="hotkey-notes">Press 'P' to pause</div>
+            <div id="hotkey-notes">Press space to instantly snap the block down drop</div>
+            <button id="reset-button">Reset Game</button>
+        </div>
+    </div>
+    <!-- New Return Button -->
+    <img id="return-button" src="../img/ms/start.png"></img>
+    
+    <script src="../logic/tetris/tetris.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    checkMaintenanceStatus();
+    setInterval(checkMaintenanceStatus, 5000); // Check every 5 seconds
+});
+
+function checkMaintenanceStatus() {
+    fetch('../../../maintenanceVariables.json')
+        .then(response => response.json())
+        .then(data => {
+            if (data.gameModes.tetris) {
+                displayMaintenanceScreen();
+            } else {
+                removeMaintenanceScreen();
+            }
+        })
+        .catch(error => console.error('Failed to load maintenance variables:', error));
+}
+
+function displayMaintenanceScreen() {
+    let maintenanceScreen = document.getElementById('maintenanceScreen');
+    if (!maintenanceScreen) {
+        maintenanceScreen = document.createElement('div');
+        maintenanceScreen.id = 'maintenanceScreen';
+        maintenanceScreen.style.position = 'fixed';
+        maintenanceScreen.style.left = 0;
+        maintenanceScreen.style.top = 0;
+        maintenanceScreen.style.width = '100%';
+        maintenanceScreen.style.height = '100%';
+        maintenanceScreen.style.backgroundColor = 'black'; // Pure black background
+        maintenanceScreen.style.zIndex = 1000;
+        maintenanceScreen.style.display = 'flex';
+        maintenanceScreen.style.justifyContent = 'center';
+        maintenanceScreen.style.alignItems = 'center';
+        maintenanceScreen.style.color = 'white';
+        maintenanceScreen.style.fontSize = '24px';
+        maintenanceScreen.style.flexDirection = 'column';
+        maintenanceScreen.innerHTML = `<p>We're currently performing maintenance. Please check back later.</p>`;
+
+        // Append the maintenance screen to the body
+        document.body.appendChild(maintenanceScreen);
+
+        // Optionally, hide the game container
+        document.getElementById('game-container').style.display = 'none';
+    }
+}
+
+function removeMaintenanceScreen() {
+    const maintenanceScreen = document.getElementById('maintenanceScreen');
+    if (maintenanceScreen) {
+        document.body.removeChild(maintenanceScreen);
+        // Optionally, show the game container again
+        document.getElementById('game-container').style.display = 'flex';
+    }
+}
+</script>
+
+
+</body>
+</html>
