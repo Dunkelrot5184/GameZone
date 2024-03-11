@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../img/main/pong.png"/>
+    <title>Pong - MultiPlayer | GameZone</title>
+
+    <link rel="stylesheet" href="../../design/spp/style.css"/>
+    <script src="../../logic//spp/style.js" type="module" defer></script>
+</head>
+<body>
+    <div class="score">
+        <div id="player-score">0</div>
+        <div id="computer-score">0</div>
+    </div>
+    <div class="ball" id="ball"></div>
+    <div class="paddle left" id="player-paddle"></div>
+    <div class="paddle right" id="computer-paddle"></div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    checkMaintenanceStatus();
+    setInterval(checkMaintenanceStatus, 5000); // Check every 5 seconds
+});
+
+function checkMaintenanceStatus() {
+    fetch('../../../maintenanceVariables.json')
+        .then(response => response.json())
+        .then(data => {
+            if (data.gameModes.pmp) {
+                displayMaintenanceScreen();
+            } else {
+                removeMaintenanceScreen();
+            }
+        })
+        .catch(error => console.error('Failed to load maintenance variables:', error));
+}
+
+function displayMaintenanceScreen() {
+    let maintenanceScreen = document.getElementById('maintenanceScreen');
+    if (!maintenanceScreen) {
+        maintenanceScreen = document.createElement('div');
+        maintenanceScreen.id = 'maintenanceScreen';
+        maintenanceScreen.style.position = 'fixed';
+        maintenanceScreen.style.left = 0;
+        maintenanceScreen.style.top = 0;
+        maintenanceScreen.style.width = '100%';
+        maintenanceScreen.style.height = '100%';
+        maintenanceScreen.style.backgroundColor = 'black'; // Pure black background
+        maintenanceScreen.style.zIndex = 1000;
+        maintenanceScreen.style.display = 'flex';
+        maintenanceScreen.style.justifyContent = 'center';
+        maintenanceScreen.style.alignItems = 'center';
+        maintenanceScreen.style.color = 'white';
+        maintenanceScreen.style.fontSize = '24px';
+        maintenanceScreen.style.flexDirection = 'column';
+        maintenanceScreen.innerHTML = `<p>We're currently performing maintenance. Please check back later.</p>`;
+
+        // Append the maintenance screen to the body
+        document.body.appendChild(maintenanceScreen);
+
+        // Optionally, hide the game container
+        document.getElementById('game-container').style.display = 'none';
+    }
+}
+
+function removeMaintenanceScreen() {
+    const maintenanceScreen = document.getElementById('maintenanceScreen');
+    if (maintenanceScreen) {
+        document.body.removeChild(maintenanceScreen);
+        // Optionally, show the game container again
+        document.getElementById('game-container').style.display = 'flex';
+    }
+}
+</script>
+
+</body>
+</html>
